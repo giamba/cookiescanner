@@ -7,7 +7,7 @@ namespace cookiescanner
 {
     public class CookieScanner
     {
-            private string _filePath;
+        private string _filePath;
         
         public CookieScanner(string filePath)
         {
