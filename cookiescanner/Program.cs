@@ -28,20 +28,15 @@ namespace cookiescanner
         static void Run(Options opts)
         {
             string currDir = Directory.GetCurrentDirectory();
-            //var lines = File.ReadLines("C:\\Dev\\cookiescanner\\cookiescanner\\testfiles\\test1.csv");
+            
+            CookieScanner cookieScanner = new CookieScanner(opts.File);
 
-            FileScanner fileScanner = new FileScanner(opts.File);
-
-            var lines = fileScanner.Scan(opts.Date);
+            var lines = cookieScanner.Scan(opts.Date);
 
             foreach (var line in lines)
             {
                 Console.WriteLine(line);
             }
-
-            Console.ReadKey();
-
-            //handle options
         }
         
         static void HandleParseError(IEnumerable<Error> errs)
