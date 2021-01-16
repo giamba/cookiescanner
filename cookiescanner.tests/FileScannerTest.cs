@@ -8,7 +8,7 @@ namespace cookiescanner.tests
     public class FileScannerTest
     {
         [Theory]
-        [InlineData("test1.csv", "2999-12-09", 1, null)]
+        [InlineData("test1.csv", "2999-12-09", 0, null)]
         [InlineData("test1.csv", "2018-12-09", 1, "AtY0laUfhglK3lC7")]
         [InlineData("test2.csv", "2018-12-08", 2, "SAZuXPGUrfbcn5UA,fbcn5UAVanZf6UtG")]
         [InlineData("test3.csv", "2018-12-08", 0, null)]
@@ -50,12 +50,11 @@ namespace cookiescanner.tests
         /// </summary>
         private string GetFilePath(string fileName)
         {
-            char dirSeparator = '\\';
-            if(RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            char dirSeparator = '/';
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                dirSeparator = '/';
+                dirSeparator = '\\';
             }
-
 
             string currPath = Directory.GetCurrentDirectory();
             currPath = currPath.Remove(currPath.LastIndexOf(dirSeparator));
