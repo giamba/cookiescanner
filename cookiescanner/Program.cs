@@ -16,9 +16,7 @@ namespace cookiescanner
 
             [Option('d', "Date", Required = true, HelpText = "Date")]
             public string Date { get; set; }
-
         }
-
 
         static void Main(string[] args)
         {
@@ -32,27 +30,23 @@ namespace cookiescanner
             string currDir = Directory.GetCurrentDirectory();
             //var lines = File.ReadLines("C:\\Dev\\cookiescanner\\cookiescanner\\testfiles\\test1.csv");
 
+            FileScanner fileScanner = new FileScanner(opts.File);
 
-            FileScanner fp = new FileScanner("C:\\Dev\\cookiescanner\\cookiescanner\\testfiles\\test2.csv");
-
-
-            var lines = fp.Parse(opts.Date);
+            var lines = fileScanner.Scan(opts.Date);
 
             foreach (var line in lines)
             {
                 Console.WriteLine(line);
             }
 
-
             Console.ReadKey();
-            
 
             //handle options
         }
+        
         static void HandleParseError(IEnumerable<Error> errs)
         {
             //handle errors
         }
-
     }
 }
