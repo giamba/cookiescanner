@@ -1,7 +1,7 @@
 ﻿# Most Active Cookie
 
-This is command line program written in .NET Core 5.0.=
-This command line tool allow you to process a log file and return the most active cookie for a specific day. 
+This is command line program written in .NET Core 5.0.  
+This command line tool allow you to process a log file and return the most active cookie for a specific day.  
 
 e.g.  
 ```
@@ -31,7 +31,7 @@ dotnet test
 ```
 
 ## Publishing
-If you want to distribute the cookiescanner cli to various hosts you can use `dotnet publish` command.
+If you want to distribute the cookiescanner cli to various hosts you can use `dotnet publish` command.  
 It is possible to publish the cookiescanner for:
 - Windows:  
 `dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true --self-contained true`  
