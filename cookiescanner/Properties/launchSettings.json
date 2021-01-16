@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "cookiescanner": {
+      "commandName": "Project",
+      "commandLineArgs": "-f test1.csv -d 2018-12-09"
+    }
+  }
+}
