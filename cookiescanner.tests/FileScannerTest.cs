@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using Xunit;
 
 namespace cookiescanner.tests
@@ -49,10 +50,17 @@ namespace cookiescanner.tests
         /// </summary>
         private string GetFilePath(string fileName)
         {
+            char dirSeparator = '\\';
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                dirSeparator = '/';
+            }
+
+
             string currPath = Directory.GetCurrentDirectory();
-            currPath = currPath.Remove(currPath.LastIndexOf('\\'));
-            currPath = currPath.Remove(currPath.LastIndexOf('\\'));
-            currPath = currPath.Remove(currPath.LastIndexOf('\\'));
+            currPath = currPath.Remove(currPath.LastIndexOf(dirSeparator));
+            currPath = currPath.Remove(currPath.LastIndexOf(dirSeparator));
+            currPath = currPath.Remove(currPath.LastIndexOf(dirSeparator));
 
             return Path.Combine(new string[] { currPath, "testfiles", fileName });
         }
