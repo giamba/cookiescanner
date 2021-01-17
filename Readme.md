@@ -1,8 +1,18 @@
 ﻿# Most Active Cookie
 
-This is command line program written in .NET Core 5.0.  
+This is command line program written in C# and .NET Core 5.0.  
 This command line tool allow you to process a log file and return the most active cookie for a specific day.  
 
+Input file e.g.
+```
+cookie,timestamp
+AtY0laUfhglK3lC7,2018-12-09T14:19:00+00:00
+SAZuXPGUrfbcn5UA,2018-12-09T10:13:00+00:00
+5UAVanZf6UtGyKVS,2018-12-09T07:25:00+00:00
+AtY0laUfhglK3lC7,2018-12-09T06:19:00+00:00
+SAZuXPGUrfbcn5UA,2018-12-08T22:03:00+00:00
+...
+```
 e.g.  
 ```
 ./cookiescanner.exe -f test1.csv -d 2018-12-09
@@ -46,4 +56,7 @@ output: `cookiescanner\bin\Release\net5.0\linux-x64\publish`
 The host only need the runtime installed (no SDK).
 You need to distribute all the files contained in the publish folder.
 
-
+## Notes
+- The main logic of the cookiescanner is implemented in only one file: `CookieScanner.cs`. In this way the scanner is easy to maintain and it could be easly translated in other langueges too.
+- As a requirement the log file can be stored in memory. Anyway some performance cosideration as been made like the use of Dictionaries and Binary search.
+- This project contains a GitHub action that run every time the code is pushed in master.

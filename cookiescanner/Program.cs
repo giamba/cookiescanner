@@ -9,39 +9,31 @@ namespace cookiescanner
     {
         public class Options
         {
-            //[Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
-            //public bool Verbose { get; set; }
-            [Option('f', "file", Required = true, HelpText = "Cookie input file.")]
+            [Option('f', "file", Required = true, HelpText = "Input Cookie file.")]
             public string File { get; set; }
 
-            [Option('d', "Date", Required = true, HelpText = "Date")]
+            [Option('d', "date", Required = true, HelpText = "Date to search.")]
             public string Date { get; set; }
         }
 
         static void Main(string[] args)
         {
             CommandLine.Parser.Default.ParseArguments<Options>(args)
-           .WithParsed(Run)
-           .WithNotParsed(HandleParseError);
+           .WithParsed(Run);
         }
 
         static void Run(Options opts)
-        {
-            string currDir = Directory.GetCurrentDirectory();
-            
+        {   
             CookieScanner cookieScanner = new CookieScanner(opts.File);
 
-            var lines = cookieScanner.Scan(opts.Date);
+            (List<string> lines, ScannerError error) = cookieScanner.Scan(opts.Date);
+            if(error != null)
+                Console.WriteLine($"{error.Message}. \n \t Exception: {error.Exception}");
 
             foreach (var line in lines)
             {
                 Console.WriteLine(line);
             }
-        }
-        
-        static void HandleParseError(IEnumerable<Error> errs)
-        {
-            //handle errors
         }
     }
 }
