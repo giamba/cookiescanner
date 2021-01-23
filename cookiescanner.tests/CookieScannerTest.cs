@@ -9,11 +9,81 @@ namespace cookiescanner.tests
     public class CookieScannerTest
     {
         [Theory]
+        [InlineData("test1.csv", 18, 44, 8)]
+        [InlineData("test2.csv", 18, 44, 11)]
+        public void WhenTesting_GetHeaderAndLineLength_and_LinesCount_ResultIsCorrect(string fileName, long expectedHeaderLength, long expectedLineLength, long expectedLinesCount)
+        {
+            //Arrange
+            CookieScanner cookieScanner = new CookieScanner(GetFilePath(fileName));
+
+            //Assert
+            Assert.Equal(expectedHeaderLength, cookieScanner.HeaderLength);
+            Assert.Equal(expectedLineLength, cookieScanner.LineLength);
+            Assert.Equal(expectedLinesCount, cookieScanner.LinesCount);
+        }
+
+
+        [Theory]
+        [InlineData("test1.csv", 0, "2018-12-09")]
+        [InlineData("test1.csv", 1, "2018-12-09")]
+        [InlineData("test1.csv", 6, "2018-12-08")]
+        [InlineData("test1.csv", 7, "2018-12-07")]
+        public void WhenTesting_GetDate_ResultIsCorrect(string fileName, long index, string expectedDate)
+        {
+            //Arrange
+            CookieScanner cookieScanner = new CookieScanner(GetFilePath(fileName));
+
+            string date = cookieScanner.GetDate(index);
+            //Assert
+            Assert.Equal(expectedDate, date);
+        }
+
+
+        [Theory]
+        [InlineData("test1.csv", "2999-12-09", 0)]
+        [InlineData("test1.csv", "2018-12-07", 1)]
+        [InlineData("test1.csv", "2018-12-09", 4)]
+        [InlineData("test2.csv", "2018-12-10", 1)]
+        [InlineData("test3.csv", "2018-12-08", 0)]
+        public void WhenTesting_SearchLines_ResultsAreCorrect(string fileName, string searchDate, int expectedCount)
+        {
+            //Arrange
+            CookieScanner cookieScanner = new CookieScanner(GetFilePath(fileName));
+
+            //Act
+            List<string> result = cookieScanner.SearchLines(searchDate);
+
+            //Assert
+            Assert.Equal(expectedCount, result.Count);
+        }
+
+        [Theory]
+        [InlineData("test1.csv", "2999-12-09", 0)]
+        [InlineData("test1.csv", "2018-12-07", 1)]
+        [InlineData("test1.csv", "2018-12-09", 4)]
+        [InlineData("test2.csv", "2018-12-10", 1)]
+        [InlineData("test3.csv", "2018-12-08", 0)]
+        public void WhenTesting_SearchLinesParalles_ResultsAreCorrect(string fileName, string searchDate, int expectedCount)
+        {
+            //Arrange
+            CookieScanner cookieScanner = new CookieScanner(GetFilePath(fileName));
+
+            //Act
+            List<string> result = cookieScanner.SearchLines(searchDate);
+
+            //Assert
+            Assert.Equal(expectedCount, result.Count);
+        }
+
+
+
+
+        [Theory]
         [InlineData("test1.csv", "2999-12-09", 0, null)]
         [InlineData("test3.csv", "2018-12-08", 0, null)]
         [InlineData("test1.csv", "2018-12-09", 1, "AtY0laUfhglK3lC7")]
         [InlineData("test2.csv", "2018-12-08", 2, "SAZuXPGUrfbcn5UA,fbcn5UAVanZf6UtG")]
-        public void WhenTestingScan_ResultsAreCorrect(string fileName, string searchDate, int expectedCount, string expectedCookies)
+        public void WhenTesting_Scan_ResultsAreCorrect(string fileName, string searchDate, int expectedCount, string expectedCookies)
         {
             //Arrange
             CookieScanner cookieScanner = new CookieScanner(GetFilePath(fileName));
@@ -28,7 +98,7 @@ namespace cookiescanner.tests
 
         [Theory]
         [InlineData("test4.csv", "2018-12-09", "### Error parsing line: AtY0laUfhglK3lC7,2018-12-09XXXXXXXXXXXX14:19:00+00:00")]
-        public void WhenTestingScannerError_ErrorsAreCorrect(string fileName, string searchDate, string expectedMessage)
+        public void WhenTesting_ScannerError_ErrorsAreCorrect(string fileName, string searchDate, string expectedMessage)
         {
             //Arrange
             CookieScanner cookieScanner = new CookieScanner(GetFilePath(fileName));
@@ -39,24 +109,6 @@ namespace cookiescanner.tests
             //Assert
             Assert.Null(result);
             Assert.Equal(expectedMessage, error.Message);
-        }
-
-        [Theory]
-        [InlineData("test1.csv", "2999-12-09", 0)]
-        [InlineData("test1.csv", "2018-12-07", 1)]
-        [InlineData("test1.csv", "2018-12-09", 4)]
-        [InlineData("test2.csv", "2018-12-10", 1)]
-        [InlineData("test3.csv", "2018-12-08", 0)]
-        public void WhenTestingSearchLines_ResultsAreCorrect(string fileName, string searchDate, int expectedCount)
-        {
-            //Arrange
-            CookieScanner cookieScanner = new CookieScanner(GetFilePath(fileName));
-
-            //Act
-            List<string> result = cookieScanner.SearchLines(searchDate);
-
-            //Assert
-            Assert.Equal(expectedCount, result.Count);
         }
 
         /// <summary>

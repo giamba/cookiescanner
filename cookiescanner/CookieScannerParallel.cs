@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace cookiescanner
+namespace cookiescannerparallel
 {
-    public class CookieScanner
+    public class CookieScannerParallel
     {
         private string _filePath;
         private FileStream _fileStream;
@@ -16,7 +16,7 @@ namespace cookiescanner
         public long LineLength { get; private set; }
 
 
-        public CookieScanner(string filePath)
+        public CookieScannerParallel(string filePath)
         {
             _filePath = filePath;
             _fileStream = new FileStream(_filePath, FileMode.Open, FileAccess.Read);
@@ -37,6 +37,16 @@ namespace cookiescanner
             Dictionary<string, int> cookieCountDict = new Dictionary<string, int>();
             Dictionary<int, List<string>> countCookieListDict = new Dictionary<int, List<string>>();
             int max = 1;
+
+            var cores = Environment.ProcessorCount; // 8
+
+          
+
+
+
+            //LinesCount 
+
+
 
             try
             {
@@ -81,6 +91,25 @@ namespace cookiescanner
                 _fileStream.Close();
             }
         }
+
+
+        public List<Tuple<long, long, long>> GetChunk(long chunkNum, long numLines)
+        {
+            long chunkSize = numLines / chunkNum;
+            List<Tuple<long, long, long>> result = new List<Tuple<long, long, long>>();
+
+            for (long i = 0, start = 0, end = chunkSize; i < chunkNum; i++, start += chunkSize + 1, end = start + chunkSize)
+            {
+                if (end > numLines - 1)
+                    end = numLines - 1;
+
+                long size = end - start + 1;
+                result.Add(new Tuple<long, long, long>(start, end, size));
+
+            }
+            return result;
+        }
+
 
         /// <summary>
         /// Search for lines that match searchDate. Binary search, complexity O(log N)
